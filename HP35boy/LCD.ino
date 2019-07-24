@@ -1,5 +1,9 @@
 void lcd_HP35() {
   //lcd.clear();
+  arduboy.clear();
+  arduboy.println("HP35 EMU");
+  arduboy.display();
+  
   chr_prtd = 0;
   for (i = WSIZE - 1; i >= 0; i--)
   {
@@ -33,5 +37,8 @@ void lcd_HP35() {
 
 void print_lcd(unsigned char m) {
   //lcd.print(m);
+  Serial.print((char)m);
+  arduboy.print((char)m);
+  arduboy.display();
   chr_prtd++;
 }

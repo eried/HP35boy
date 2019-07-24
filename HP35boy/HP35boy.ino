@@ -11,13 +11,8 @@ Arduboy2 arduboy;
 
 #define SSIZE 12
 #define WSIZE 14
-//#define LCD1x16 true  // otherwise is .... LCD 2 x 16 always 2 line (2x8) or (2x16) one IC 44780
-// only the upper row work obviously whem use LCD (2x16)
-// false design a LCD 2 x 16
 
-int ledPin = 13;
-boolean toggle;
-
+int ledPin = RED_LED;
 
 int i, tm;
 int io_count = 2;

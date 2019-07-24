@@ -1,7 +1,4 @@
-
 void loop() {
-
-
 
   prevCarry = carry;
   carry = 0;
@@ -26,7 +23,7 @@ void loop() {
   if (key_code < 255) {
     error = 0;
     Timer1.stop();
-    digitalWrite(ledPin, LOW);
+    digitalWrite(ledPin, HIGH);
 
     key_rom = key_code;
 
@@ -77,8 +74,8 @@ void loop() {
   //routine di servizio che legge i dati in input
 
 
-  /*if (keyboard.available()) {
-    char c = keyboard.read();
+  if (Serial.available()) {
+    char c = Serial.read();
 
     switch (c) {
       case '0':
@@ -121,77 +118,79 @@ void loop() {
         key_code = 50;
         break;
 
-      case PS2_ENTER:
+      case 13: // enter
         key_code = 62;
         break;
 
-      case PS2_SF7: //1/x
+      case 'q': //1/x
         key_code = 14;
         break;
 
-      case PS2_SF9: //SIN
+      case 'w': //SIN
         key_code = 43;
         break;
 
-      case PS2_SF10: //COS
+      case 'e': //COS
         key_code = 42;
         break;
 
-      case PS2_SF11: //TAN
+      case 'r': //TAN
         key_code = 40;
         break;
 
-      case PS2_SF12: //PI
+      case 't': //PI
         key_code = 34;
         break;
 
-      case PS2_F1: //CHS
+      case 'y': //CHS
         key_code = 59;
         break;
 
-      case PS2_F2: //EEX
+      case 'u': //EEX
         key_code = 58;
         break;
 
-      case PS2_F3: //x<->Y
+      case 'i': //x<->Y
         key_code = 12;
         break;
       // |
-      case PS2_F4: //Rv
+      case 'o': //Rv
         key_code = 11;
         break;
 
-      case PS2_F5: //STO
+      case 'p': //STO
         key_code = 10;
         break;
 
-      case PS2_F6: //RCL
+      case 'a': //RCL
         key_code = 8;
         break;
 
-      case PS2_F7: //X^Y
+      case 's': //X^Y
         key_code = 6;
         break;
 
-      case PS2_F8: //log
+      case 'd': //log
         key_code = 4;
         break;
 
-      case PS2_F9: //ln
+      case 'f': //ln
         key_code = 3;
         break;
 
-      case PS2_F10: //e^x
+      case 'g': //e^x
         key_code = 2;
         break;
 
-      case PS2_F11: //SQR(x)
+      case 'h': //SQR(x)
         key_code = 46;
         break;
 
-      case PS2_F12: //ARC
+      case 'j': //ARC
         key_code = 44;
         break;
+
+      // -------
 
       case '+':
         key_code = 22;
@@ -213,18 +212,27 @@ void loop() {
         key_code = 35;
         break;
 
-      case PS2_SESC:
+      /*case PS2_SESC:
+        key_code = 0; //CLR
+        break;*/
+
+      case 'k':
         key_code = 0; //CLR
         break;
 
-      case PS2_ESC:
+      case 'l':
         key_code = 56; //CLX
         break;
 
       default:
         key_code = -1;
     }
-  }*/
+  }
+  if (key_code < 255)
+  {
+    Serial.print("Key:");
+    Serial.println(key_code);
+  }
 
   //*********************************************************
 
@@ -391,13 +399,6 @@ void loop() {
 
     }
   }
-
-
-
-
-
-
-
 
   if ((fetch_l & 0x03) == 0x03) {
     //salto condizionale
@@ -693,6 +694,7 @@ void loop() {
   //**************************************************************************
   //**************************************************************************
   //**************************************************************************
+
   if (display_enable) {
 
     update_display = true;
@@ -707,198 +709,4 @@ void loop() {
     }
   }
 
-
-
-
 }//fine ciclo loop
-
-void get_f_l(char ws) {
-
-  //("field selection = ");
-
-
-  switch (word_select) {
-
-    case 0:
-      first = p;
-      last = p;
-      break;
-
-    case 1:
-      first = 3;
-      last = 12;
-      break;
-
-    case 2:
-      first = 0;
-      last = 2;
-      break;
-
-    case 3:
-      first = 0;
-      last = 13;
-      break;
-
-    case 4:
-      first = 0;
-      last = p;
-      break;
-
-    case 5:
-      first = 3;
-      last = 13;
-      break;
-
-    case 6:
-      first = 2;
-      last = 2;
-      break;
-
-    case 7:
-      first = 13;
-      last = 13;
-      break;
-
-
-  }
-
-
-  return;
-
-}
-
-byte do_add (byte x, byte y)  {
-  int res;
-  res = x + y + carry;
-  if (res > 9) {
-    res -= 10;
-    carry = 1;
-  } else
-    carry = 0;
-  return (byte) res;
-}
-
-byte do_sub (byte x, byte y)  {
-  int res;
-  res = (x - y) - carry;
-  if (res < 0) {
-    res += 10;
-    carry = 1;
-  }
-  else
-    carry = 0;
-  return (byte) res;
-}
-
-
-
-unsigned char codeKey(unsigned char key_code) {
-  switch (key_code)  {
-    // 0
-    case 48:
-      key_code = 36;
-      break;
-    // 1
-    case 49:
-      key_code = 28;
-      break;
-    // 2
-    case 50:
-      key_code = 27;
-      break;
-    // 3
-    case 51:
-      key_code = 26;
-      break;
-    // 4
-    case 52:
-      key_code = 20;
-      break;
-    // 5
-    case 53:
-      key_code = 19;
-      break;
-    // 6
-    case 54:
-      key_code = 18;
-      break;
-    // 7
-    case 55:
-      key_code = 52;
-      break;
-    // 8
-    case 56:
-      key_code = 51;
-      break;
-    // 9
-    case 57:
-      key_code = 50;
-      break;
-    // .
-    case 46:
-      key_code = 35;
-      break;
-    // +
-    case 43:
-      key_code = 22;
-      break;
-    // -
-    case 45:
-      key_code = 54;
-      break;
-    // *
-    case 42:
-      key_code = 30;
-      break;
-    // /
-    case 47:
-      key_code = 38;
-      break;
-    //ENTER con il tasto invio
-    case 10:
-      key_code = 62;
-      break;
-    //ENTER con il tasto #
-    case 35:
-      key_code = 62;
-      break;
-
-    //sin lettera s
-    case 115:
-      key_code = 43;
-      break;
-    //radice quadrata r
-    case 114:
-      key_code = 46;
-      break;
-    //pi greco
-    case 112:
-      key_code = 34;
-      break;
-    //clear
-    case 99:
-
-      key_code = 0;
-      break;
-    //arc
-
-    case 97:
-      key_code = 44;
-      break;
-      //default:
-      //non fa nulla
-  }
-  return key_code;
-}
-
-
-void FlashLed()
-{
-  if (toggle)
-    digitalWrite(ledPin, HIGH);
-  if (!toggle)
-    digitalWrite(ledPin, LOW);
-  toggle = !toggle;
-
-
-}

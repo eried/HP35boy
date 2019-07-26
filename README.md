@@ -4,6 +4,9 @@ HP35boy is a HP35 Emulator for Arduboy. The HP-35 was Hewlett-Packard's first po
 
 ![](images/screen.PNG)
 
+## Install on your Arduboy
+Check http://arduboy.ried.cl 
+
 ## Credits
 
 The whole emulator was written by http://home.citycable.ch/pierrefleur/Jacques-Laporte/HP35_Arduino.htm, this is merely an adaptation for the Arduboy form factor. Please check `rom.h` credits for the original license text

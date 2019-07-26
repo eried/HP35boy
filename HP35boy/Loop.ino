@@ -4,8 +4,8 @@ void loop()
   carry = 0;
   fetch_h = 0;
   fetch_l = 0;
-  fetch_h = pgm_read_byte_near (rom + ( offset * 256 * 2 ) + (pc * 2)    );
-  fetch_l = pgm_read_byte_near (rom + ( offset * 256 * 2 ) + (pc * 2) + 1 );
+  fetch_h = pgm_read_byte_near ((enable_bug?rom_bug:rom) + ( offset * 256 * 2 ) + (pc * 2)    );
+  fetch_l = pgm_read_byte_near ((enable_bug?rom_bug:rom) + ( offset * 256 * 2 ) + (pc * 2) + 1 );
 
   if ((pc == 191) & (offset == 0)) {
     error = 1;
@@ -23,7 +23,7 @@ void loop()
   if (key_code < 255) {
     error = 0;
     Timer1.stop();
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(RED_LED, HIGH);
 
     key_rom = key_code;
 
@@ -72,167 +72,8 @@ void loop()
   }
 
   //routine di servizio che legge i dati in input
+  //key_code = -1;
 
-
-  if (Serial.available()) {
-    char c = Serial.read();
-
-    switch (c) {
-      case '0':
-        key_code = 36;
-        break;
-
-      case '1':
-        key_code = 28;
-        break;
-
-      case '2':
-        key_code = 27;
-        break;
-
-      case '3':
-        key_code = 26;
-        break;
-
-      case '4':
-        key_code = 20;
-        break;
-
-      case '5':
-        key_code = 19;
-        break;
-
-      case '6':
-        key_code = 18;
-        break;
-
-      case '7':
-        key_code = 52;
-        break;
-
-      case '8':
-        key_code = 51;
-        break;
-
-      case '9':
-        key_code = 50;
-        break;
-
-      case 13: // enter
-        key_code = 62;
-        break;
-
-      case 'q': //1/x
-        key_code = 14;
-        break;
-
-      case 'w': //SIN
-        key_code = 43;
-        break;
-
-      case 'e': //COS
-        key_code = 42;
-        break;
-
-      case 'r': //TAN
-        key_code = 40;
-        break;
-
-      case 't': //PI
-        key_code = 34;
-        break;
-
-      case 'y': //CHS
-        key_code = 59;
-        break;
-
-      case 'u': //EEX
-        key_code = 58;
-        break;
-
-      case 'i': //x<->Y
-        key_code = 12;
-        break;
-      // |
-      case 'o': //Rv
-        key_code = 11;
-        break;
-
-      case 'p': //STO
-        key_code = 10;
-        break;
-
-      case 'a': //RCL
-        key_code = 8;
-        break;
-
-      case 's': //X^Y
-        key_code = 6;
-        break;
-
-      case 'd': //log
-        key_code = 4;
-        break;
-
-      case 'f': //ln
-        key_code = 3;
-        break;
-
-      case 'g': //e^x
-        key_code = 2;
-        break;
-
-      case 'h': //SQR(x)
-        key_code = 46;
-        break;
-
-      case 'j': //ARC
-        key_code = 44;
-        break;
-
-      // -------
-
-      case '+':
-        key_code = 22;
-        break;
-
-      case '-':
-        key_code = 54;
-        break;
-
-      case '/':
-        key_code = 38;
-        break;
-
-      case '*':
-        key_code = 30;
-        break;
-
-      case '.':
-        key_code = 35;
-        break;
-
-      /*case PS2_SESC:
-        key_code = 0; //CLR
-        break;*/
-
-      case 'k':
-        key_code = 0; //CLR
-        break;
-
-      case 'l':
-        key_code = 56; //CLX
-        break;
-
-      default:
-        key_code = -1;
-    }
-  }
-  if (key_code < 255)
-  {
-    Serial.print("Key:");
-    Serial.println(key_code);
-  }
 
   //*********************************************************
 
@@ -689,10 +530,6 @@ void loop()
 
   }
 
-
-  //**************************************************************************
-  //**************************************************************************
-  //**************************************************************************
   //**************************************************************************
 
   if (display_enable) {
@@ -707,6 +544,44 @@ void loop()
       update_display = false;
 
     }
+  }
+
+  //**************************************************************************
+  arduboy.pollButtons();
+  if (arduboy.justReleased(LEFT_BUTTON))
+  {
+    currentKey = keyboardSelectByPosition(0);
+    update_display = true;
+  }
+  if (arduboy.justReleased(UP_BUTTON))
+  {
+    currentKey = keyboardSelectByPosition(1);
+    update_display = true;
+  }
+  if (arduboy.justReleased(RIGHT_BUTTON))
+  {
+    currentKey = keyboardSelectByPosition(2);
+    update_display = true;
+  }
+  if (arduboy.justReleased(DOWN_BUTTON))
+  {
+    currentKey = keyboardSelectByPosition(3);
+    update_display = true;
+  }
+  if (arduboy.justReleased(A_BUTTON))
+    key_code = keyboard[currentKey].keycode;
+
+  if (arduboy.justReleased(B_BUTTON))
+  {
+    byte c = keyboardSelectByCode(62);
+    if(currentKey == c)
+      currentKey = anotherButton; 
+    else
+    {
+      anotherButton = currentKey;
+      currentKey = c;
+    }
+    update_display = true;
   }
 
 }//fine ciclo loop

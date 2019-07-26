@@ -1,5 +1,5 @@
-void loop() {
-
+void loop()
+{
   prevCarry = carry;
   carry = 0;
   fetch_h = 0;

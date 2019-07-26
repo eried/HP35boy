@@ -1,4 +1,3 @@
-
 void get_f_l(char ws) {
 
   //("field selection = ");

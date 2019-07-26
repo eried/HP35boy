@@ -1,5 +1,6 @@
 # HP35boy
 
+<img src="images/hp35_comparison.png" width="256">
 HP35boy is a HP35 Emulator for Arduboy. The HP-35 was Hewlett-Packard's first pocket calculator and the world's first scientific pocket calculator: a calculator with trigonometric and exponential functions. https://en.wikipedia.org/wiki/HP-35
 
 ![](images/screen.PNG)

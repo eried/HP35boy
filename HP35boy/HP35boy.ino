@@ -6,6 +6,7 @@
 #include "rom.h"
 #include "registers.h"
 
+#include "keyboard.h"
 #include "bitmaps.h"
 
 Arduboy2 arduboy;
